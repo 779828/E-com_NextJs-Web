@@ -1,0 +1,26 @@
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/login",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
+  ]
+}
