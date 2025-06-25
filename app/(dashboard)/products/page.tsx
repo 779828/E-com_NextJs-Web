@@ -17,38 +17,48 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { addItemToCart } from "../../../store/cartItmeSlice";
 
+interface Product {
+  id: string;
+  name: string;
+  spec: string;
+  image: string;
+  rating: string;
+  price: number;
+  oldPrice: number;
+  discount: number;
+}
+
 export default function ProductPage() {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<any[]>([]);
-  const [id, setId] = useState<any[]>([]);
-  const [email, setEmail] = useState<any[]>([]);
+  const [data, setData] = useState<Product[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const currentSession = await supabase.auth.getSession();
-      if (!currentSession) {
+      const { data: sessionData } = await supabase.auth.getSession();
+
+      const user = sessionData?.session?.user;
+      if (!user) {
         console.error("User not authenticated");
         return;
       }
-      setId(currentSession?.data?.session?.user?.id);
-      setEmail(currentSession?.data?.session?.user?.email);
 
       const { data: products, error } = await supabase
         .from("products")
         .select("*");
+
       if (error) {
         console.error("Error fetching products:", error);
       } else {
-        setData(products || []);
+        setData(products as Product[]);
       }
     };
+
     fetchData();
   }, []);
 
-  const handleAdd = (productId: string) => async () => {
+  const handleAdd = (productId: string) => () => {
     dispatch(addItemToCart({ productId, quantity: 1 }));
-    toast.success(`Item added to cart! with user Email ${email}`);
+    toast.success(`Item added to cart!`);
   };
 
   return (
