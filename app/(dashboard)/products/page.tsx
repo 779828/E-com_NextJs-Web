@@ -11,11 +11,12 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Rating from "@mui/material/Rating";
 import Chip from "@mui/material/Chip";
-import { IconButton } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
 import { addItemToCart } from "../../../store/cartItmeSlice";
+import { useAppDispatch } from "../../../store/hooks";
+import { useRouter } from "next/navigation";
 
 interface Product {
   id: string;
@@ -28,8 +29,10 @@ interface Product {
   discount: number;
 }
 
-export default function ProductPage() {
-  const dispatch = useDispatch();
+export default function ProductPage(param: Product) {
+  const router = useRouter();
+
+  const dispatch = useAppDispatch();
   const [data, setData] = useState<Product[]>([]);
 
   useEffect(() => {
@@ -56,13 +59,23 @@ export default function ProductPage() {
     fetchData();
   }, []);
 
-  const handleAdd = (productId: string) => () => {
+  const handleAdd = (productId: string) => (param: any) => {
     dispatch(addItemToCart({ productId, quantity: 1 }));
     toast.success(`Item added to cart!`);
   };
 
+  const handleNavigate = () => {
+    router.push("/products/createProducts");
+  };
+
   return (
     <Box sx={{ padding: 3 }}>
+      <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+        <Button variant="contained" color="primary" onClick={handleNavigate}>
+          + Add Product
+        </Button>
+      </Box>
+
       <Grid container spacing={3}>
         {data.map((product) => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
@@ -81,7 +94,6 @@ export default function ProductPage() {
                 <Typography variant="body2" color="text.secondary">
                   {product.spec}
                 </Typography>
-
                 <Box display="flex" alignItems="center" mt={1}>
                   <Rating
                     name="product-rating"
@@ -94,7 +106,6 @@ export default function ProductPage() {
                     ({product.rating})
                   </Typography>
                 </Box>
-
                 <Box display="flex" gap={1} mt={1} alignItems="center">
                   <Typography variant="h6" color="primary">
                     ₹{product.price}

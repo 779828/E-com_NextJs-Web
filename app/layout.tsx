@@ -11,8 +11,8 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <ToastContainer />
       <body>
+        <ToastContainer />
         <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>

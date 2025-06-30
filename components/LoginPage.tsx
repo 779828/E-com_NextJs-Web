@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { supabase } from "../utils/supabase";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -48,69 +49,75 @@ export default function LoginPage() {
         alignItems: "center",
       }}
     >
-      <Paper
-        elevation={6}
-        sx={{
-          width: 350,
-          p: 4,
-          borderRadius: 3,
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-        }}
+      <motion.div
+        initial={{ y: -60, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 30, damping: 20 }}
       >
-        <Typography variant="h5" textAlign="center" fontWeight="bold">
-          Login
-        </Typography>
-
-        <TextField
-          label="Email"
-          variant="standard"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          fullWidth
-        />
-
-        <TextField
-          label="Password"
-          variant="standard"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          fullWidth
-        />
-
-        {error && <Alert severity="error">{error}</Alert>}
-
-        <Button
-          variant="contained"
-          onClick={handleEmailLogin}
-          disabled={loading}
+        <Paper
+          elevation={6}
           sx={{
-            background: "linear-gradient(to right, #2193b0, #6dd5ed)",
-            color: "#fff",
-            fontWeight: "bold",
-            mt: 1,
+            width: 350,
+            p: 4,
+            borderRadius: 3,
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
           }}
         >
-          {loading ? "Signing in..." : "Login"}
-        </Button>
-
-        <Box textAlign="center" mt={1}>
-          <MuiLink href="#" underline="hover" fontSize={14}>
-            Forgot <strong>Password?</strong>
-          </MuiLink>
-        </Box>
-        <Box textAlign="center">
-          <Typography fontSize={14}>
-            Don’t have an account?{" "}
-            <MuiLink href="#" underline="hover" fontWeight="bold">
-              Sign up
-            </MuiLink>
+          <Typography variant="h5" textAlign="center" fontWeight="bold">
+            Login
           </Typography>
-        </Box>
-      </Paper>
+
+          <TextField
+            label="Email"
+            variant="standard"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            fullWidth
+          />
+
+          <TextField
+            label="Password"
+            variant="standard"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            fullWidth
+          />
+
+          {error && <Alert severity="error">{error}</Alert>}
+
+          <Button
+            variant="contained"
+            onClick={handleEmailLogin}
+            disabled={loading}
+            sx={{
+              background: "linear-gradient(to right, #2193b0, #6dd5ed)",
+              color: "#fff",
+              fontWeight: "bold",
+              mt: 1,
+            }}
+          >
+            {loading ? "Signing in..." : "Login"}
+          </Button>
+
+          <Box textAlign="center" mt={1}>
+            <MuiLink href="#" underline="hover" fontSize={14}>
+              Forgot <strong>Password?</strong>
+            </MuiLink>
+          </Box>
+          <Box textAlign="center">
+            <Typography fontSize={14}>
+              Don’t have an account?{" "}
+              <MuiLink href="#" underline="hover" fontWeight="bold">
+                Sign up
+              </MuiLink>
+            </Typography>
+          </Box>
+        </Paper>
+      </motion.div>
     </Box>
   );
 }

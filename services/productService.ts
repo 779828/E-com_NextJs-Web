@@ -1,7 +1,30 @@
 import { supabase } from "../utils/supabase";
 
+interface Product {
+  id?: number;
+  name: string;
+  spec: string;
+  price: string;
+  oldPrice: string;
+  rating: string;
+  discount: string;
+  image: string;
+  category_id: number | null;
+  user_id?: string;
+}
+
+interface Category {
+  id: number;
+  name: string;
+  image: string;
+  desc: string;
+}
+
 // GET
-export const fetchProducts = async (category_id = null, searchQuery = "") => {
+export const fetchProducts = async (
+  category_id: number | null = null,
+  searchQuery: string = ""
+): Promise<Product[]> => {
   let query = supabase.from("products").select("*");
 
   if (category_id) {
@@ -27,7 +50,7 @@ export const fetchProducts = async (category_id = null, searchQuery = "") => {
 };
 
 // GET
-export const fetchCategories = async () => {
+export const fetchCategories = async (): Promise<Category[]> => {
   const { data, error } = await supabase
     .from("categories")
     .select("id, name, image, desc")
@@ -52,7 +75,7 @@ export const createProduct = async ({
   image,
   category_id,
   user_id,
-}) => {
+}: Product): Promise<Product | null> => {
   console.log(user_id, "user_id in createCard");
 
   const { data, error } = await supabase
