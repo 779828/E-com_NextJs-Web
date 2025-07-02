@@ -47,7 +47,8 @@ export default function ProductPage(param: Product) {
 
       const { data: products, error } = await supabase
         .from("products")
-        .select("*");
+        .select("*")
+        .eq("user_id", user.id);
 
       if (error) {
         console.error("Error fetching products:", error);
